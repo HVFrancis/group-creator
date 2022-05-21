@@ -2,8 +2,8 @@
 
 # This contains code to create a PDF file given a list of student groups
 
-# MATH 105-01        Fundamentals of Mathematics           Xavier Univ.
-# HFrancis                  Unit 1 Teams                   Fall 2022
+# ARITHS 105-01              Arithmetics                Hogwarts SWW
+# HFrancis                  Unit 1 Teams                   Fall 1991
 
 
 #           Team 1                             Team 2
@@ -35,7 +35,7 @@ from make_groups import *
 width, height = letter  #keep for later
 
 
-# these look like they should be packaged as kwargs to create_header
+# these look like they should be keyword parameters to create_header
 course_no = "ARITH 105"
 section = "01"
 course_title = "Arithmetics"
@@ -49,20 +49,20 @@ pdf_name = f"{course_no}-{section} Unit {unit_no} Teams.pdf"
 
 
 def initialize_document():
-    c = canvas.Canvas(pdf_name, pagesize=letter)
-    return c
+    canvas = canvas.Canvas(pdf_name, pagesize=letter)
+    return canvas
 
-def create_header(c):
+def create_header(canvas):
     width, height = letter
     first_row = height - inch
     second_row = height - (inch + 15)
-    c.drawString(inch, first_row, f"{course_no}-{section}")
-    c.drawCentredString(width/2, first_row, f"{course_title}")
-    c.drawRightString(width-inch, first_row, f"{school}")
-    c.drawString(inch, second_row, f"{instructor}")
-    c.drawCentredString(width/2, second_row, f"Unit {unit_no} Teams")
-    c.drawRightString(width-inch, second_row, f"{term}")
-    return c
+    canvas.drawString(inch, first_row, f"{course_no}-{section}")
+    canvas.drawCentredString(width/2, first_row, f"{course_title}")
+    canvas.drawRightString(width-inch, first_row, f"{school}")
+    canvas.drawString(inch, second_row, f"{instructor}")
+    canvas.drawCentredString(width/2, second_row, f"Unit {unit_no} Teams")
+    canvas.drawRightString(width-inch, second_row, f"{term}")
+    return canvas
 
 def small_tables(groups):
     """This function takes the student groups and returns a
@@ -86,18 +86,18 @@ def small_tables(groups):
     return table_list
 
 
-def plot_tables(c, t_list):
+def plot_tables(canvas, table_list):
     spaces = "      "
-    data = [[t_list[0], spaces, t_list[1]],
+    data = [[table_list[0], spaces, table_list[1]],
             [spaces, spaces, spaces],
-            [t_list[2], spaces, t_list[3]],
+            [table_list[2], spaces, table_list[3]],
             [spaces, spaces, spaces],
-            [t_list[4], spaces, t_list[5]],
+            [table_list[4], spaces, table_list[5]],
             ]
     full_table = Table(data)
-    full_table.wrapOn(c, 0, 0)
-    full_table.drawOn(c, 100, 300)
-    return c
+    full_table.wrapOn(canvas, 0, 0)
+    full_table.drawOn(canvas, 100, 300)
+    return canvas
 
 
 
