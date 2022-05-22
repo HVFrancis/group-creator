@@ -35,34 +35,48 @@ from make_groups import *
 width, height = letter  #keep for later
 
 
-# these look like they should be keyword parameters to create_header
-course_no = "ARITH 105"
-section = "01"
-course_title = "Arithmetics"
-school = "Hogwarts SWW"
-instructor = "HFrancis"
-unit_no = "1"
-term = "Fall 1991"
-#pdf_name = "MATH 105-02 Unit 1 Teams.pdf"
-pdf_name = f"{course_no}-{section} Unit {unit_no} Teams.pdf"
+# # these look like they should be keyword parameters to create_header
+# course_no = "ARITH 105"
+# section = "01"
+# course_title = "Arithmetics"
+# school = "Hogwarts SWW"
+# instructor = "HFrancis"
+# unit_no = "1"
+# term = "Fall 1991"
+# #pdf_name = "MATH 105-02 Unit 1 Teams.pdf"
+# pdf_name = f"{course_no}-{section} Unit {unit_no} Teams.pdf"
 
 
 
-def initialize_document():
-    canvas = canvas.Canvas(pdf_name, pagesize=letter)
-    return canvas
+def initialize_document(pdf_name):
+    c = canvas.Canvas(pdf_name, pagesize=letter)
+    return c
 
-def create_header(canvas):
+def create_header(course_no,
+                  section,
+                  course_title,
+                  school,
+                  instructor,
+                  unit_no,
+                  term
+                  ):
+    """ This function creates the document and prints course information
+    """
+    # I don't like that this does the creation, but I don't know
+    # how to create the file without repeating arguement
+    pdf_name = f"{course_no}-{section} Unit {unit_no} Teams.pdf"
+    c = initialize_document(pdf_name)
+     
     width, height = letter
     first_row = height - inch
     second_row = height - (inch + 15)
-    canvas.drawString(inch, first_row, f"{course_no}-{section}")
-    canvas.drawCentredString(width/2, first_row, f"{course_title}")
-    canvas.drawRightString(width-inch, first_row, f"{school}")
-    canvas.drawString(inch, second_row, f"{instructor}")
-    canvas.drawCentredString(width/2, second_row, f"Unit {unit_no} Teams")
-    canvas.drawRightString(width-inch, second_row, f"{term}")
-    return canvas
+    c.drawString(inch, first_row, f"{course_no}-{section}")
+    c.drawCentredString(width/2, first_row, f"{course_title}")
+    c.drawRightString(width-inch, first_row, f"{school}")
+    c.drawString(inch, second_row, f"{instructor}")
+    c.drawCentredString(width/2, second_row, f"Unit {unit_no} Teams")
+    c.drawRightString(width-inch, second_row, f"{term}")
+    return c
 
 def small_tables(groups):
     """This function takes the student groups and returns a
@@ -86,7 +100,10 @@ def small_tables(groups):
     return table_list
 
 
-def plot_tables(canvas, table_list):
+def plot_tables(c, table_list):
+    """Take the list of tables and position them in the PDF document
+    
+    """
     spaces = "      "
     data = [[table_list[0], spaces, table_list[1]],
             [spaces, spaces, spaces],
@@ -95,16 +112,22 @@ def plot_tables(canvas, table_list):
             [table_list[4], spaces, table_list[5]],
             ]
     full_table = Table(data)
-    full_table.wrapOn(canvas, 0, 0)
-    full_table.drawOn(canvas, 100, 300)
-    return canvas
+    full_table.wrapOn(c, 0, 0)
+    full_table.drawOn(c, 100, 300)
+    return c
 
 
 
 
 def main():
-    my_canvas = initialize_document()
-    my_canvas = create_header(my_canvas)
+    my_canvas = create_header(course_no = "ARITH 105",
+                              section = "01",
+                              course_title = "Arithmetics",
+                              school = "Hogwarts SWW",
+                              instructor = "HFrancis",
+                              unit_no = "1",
+                              term = "Fall 1991"   
+                              )
 
     students = get_students("Sample Roster 24.xlsx")
     groups = make_groups(students)
