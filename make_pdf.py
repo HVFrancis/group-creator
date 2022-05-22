@@ -53,7 +53,7 @@ def create_header(course_no,
     # how to create the file without repeating arguement
     pdf_name = f"{course_no}-{section} Unit {unit_no} Teams.pdf"
     c = initialize_document(pdf_name)
-     
+    
     width, height = letter
     first_row = height - inch
     second_row = height - (inch + 15)
@@ -112,22 +112,24 @@ def plot_tables(c, table_list):
 
 
 def main():
-    my_canvas = create_header(course_no = "ARITH 105",
-                              section = "01",
-                              course_title = "Arithmetics",
-                              school = "Hogwarts SWW",
-                              instructor = "HFrancis",
-                              unit_no = "1",
-                              term = "Fall 1991"   
-                              )
-    df = get_df("Sample Roster 24.xlsx")
-    students = get_students(df)
-    groups = make_groups(students)
-    table_list = small_tables(groups)
-    my_canvas = plot_tables(my_canvas, table_list)
+    dfs = get_dataframes("ARITHS 105 Rosters.xlsx")
+    all_groups = make_multiple_groups(dfs)
+    for key in all_groups:
 
-    my_canvas.showPage()
-    my_canvas.save()
+        my_canvas = create_header(course_no = "ARITH 105",
+                                  section = key,
+                                  course_title = "Arithmetics",
+                                  school = "Hogwarts SWW",
+                                  instructor = "HFrancis",
+                                  unit_no = "1",
+                                  term = "Fall 1991"   
+                                  )
+    
+        table_list = small_tables(all_groups[key])
+        my_canvas = plot_tables(my_canvas, table_list)
+
+        my_canvas.showPage()
+        my_canvas.save()
 
 
 
