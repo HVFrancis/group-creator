@@ -24,7 +24,7 @@
 #          name                               name
 #          name                               name
 
-from tkinter.tix import TList
+
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
@@ -33,19 +33,6 @@ from reportlab.platypus import Table
 from make_groups import *
 
 width, height = letter  #keep for later
-
-
-# # these look like they should be keyword parameters to create_header
-# course_no = "ARITH 105"
-# section = "01"
-# course_title = "Arithmetics"
-# school = "Hogwarts SWW"
-# instructor = "HFrancis"
-# unit_no = "1"
-# term = "Fall 1991"
-# #pdf_name = "MATH 105-02 Unit 1 Teams.pdf"
-# pdf_name = f"{course_no}-{section} Unit {unit_no} Teams.pdf"
-
 
 
 def initialize_document(pdf_name):
@@ -133,8 +120,8 @@ def main():
                               unit_no = "1",
                               term = "Fall 1991"   
                               )
-
-    students = get_students("Sample Roster 24.xlsx")
+    df = get_df("Sample Roster 24.xlsx")
+    students = get_students(df)
     groups = make_groups(students)
     table_list = small_tables(groups)
     my_canvas = plot_tables(my_canvas, table_list)

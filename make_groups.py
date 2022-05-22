@@ -13,7 +13,9 @@ files = ["Sample Roster 24.xlsx",
             "Sample Roster 21.xlsx",
             "Sample Roster 16.xlsx"]
 
-
+## Ideally, I want to start with a file, and have it return a list of
+## dataframes, then generate a dictionary (str -> list of lists),
+## with the section number being the key.
 
 # def get_dataframes(filename):
 #     """Get a list of all the data frames in the provided spreadsheet
@@ -23,14 +25,18 @@ files = ["Sample Roster 24.xlsx",
 #     dfs = []
 #     for sheets in book.items()
 
-def get_students(filename):
-    """Get a randomized list of students from the provided spreadsheet
+def get_students(df):
+    """Get a randomized list of students from the provided data frame
     
     """
-    df = pd.read_excel(filename)
     students = df.loc[:,"Student Name"].tolist()
     random.shuffle(students)
     return students
+
+def get_df(filename):
+    df = pd.read_excel(filename)
+    return df
+
 
 
 def make_groups(students):
@@ -50,15 +56,17 @@ def make_groups(students):
         group.sort()  
     return groups
 
-
-
-if __name__ == "__main__":
-
+def test_one_sheet():
     for file in files:
-        students = get_students(file)
+        df = get_df(file)
+        students = get_students(df)
         groups = make_groups(students)
         for group in groups:
             print(group)
         print("---")
 
+
+if __name__ == "__main__":
+
+    test_one_sheet()
 
