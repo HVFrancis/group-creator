@@ -113,7 +113,8 @@ def plot_tables(c, table_list):
             ]
     full_table = Table(data)
     full_table.wrapOn(c, 0, 0)
-    full_table.drawOn(c, 100, 300)
+    table_w, table_h = full_table.wrap(0, 0)
+    full_table.drawOn(c, (width-table_w)/2, height - 2*inch - table_h)
     return c
 
 
