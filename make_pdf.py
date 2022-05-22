@@ -107,7 +107,6 @@ def plot_tables(c, table_list):
     rows = (len(table_list) + 1)//2
     for row in range(rows):
         next_row = [table_list[2*row], spaces]
-        print(f"row={row} length of table list={len(table_list)}")
         if row == rows-1 and len(table_list) % 2 != 0:
             next_row.append(spaces)
         else:
