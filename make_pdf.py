@@ -70,6 +70,7 @@ def create_header(course_no,
     width, height = letter
     first_row = height - inch
     second_row = height - (inch + 15)
+    c.setFont("Helvetica", 14)
     c.drawString(inch, first_row, f"{course_no}-{section}")
     c.drawCentredString(width/2, first_row, f"{course_title}")
     c.drawRightString(width-inch, first_row, f"{school}")
@@ -86,12 +87,9 @@ def small_tables(groups):
     font_size = 14
     table_list = []
     for i, group in enumerate(groups):
-        data = [[f"TEAM {i+1}"],
-                [groups[i][0]],
-                [groups[i][1]],
-                [groups[i][2]], 
-                [groups[i][3]],
-                ]
+        data = [[f"TEAM {i+1}"]]
+        for j in range(len(group)):
+                data.append([groups[i][j]])
         table = Table(data)
         table.setStyle([("ALIGN", (0, 0), (-1, 0), "CENTER"),
                         ("FONTSIZE", (0, 0), (-1, -1), font_size),
@@ -105,13 +103,20 @@ def plot_tables(c, table_list):
     
     """
     spaces = "      "
-    data = [[table_list[0], spaces, table_list[1]],
-            [spaces, spaces, spaces],
-            [table_list[2], spaces, table_list[3]],
-            [spaces, spaces, spaces],
-            [table_list[4], spaces, table_list[5]],
-            ]
+    data = []    
+    rows = (len(table_list) + 1)//2
+    for row in range(rows):
+        next_row = [table_list[2*row], spaces]
+        print(f"row={row} length of table list={len(table_list)}")
+        if row == rows-1 and len(table_list) % 2 != 0:
+            next_row.append(spaces)
+        else:
+            next_row.append(table_list[2*row + 1]) 
+        data.append(next_row)
+        data.append([spaces, spaces, spaces])
+     
     full_table = Table(data)
+    full_table.setStyle([("VALIGN", (0, 0), (-1, -1), "TOP"),])
     full_table.wrapOn(c, 0, 0)
     table_w, table_h = full_table.wrap(0, 0)
     full_table.drawOn(c, (width-table_w)/2, height - 2*inch - table_h)
