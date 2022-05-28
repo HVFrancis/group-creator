@@ -35,10 +35,6 @@ from make_groups import *
 width, height = letter  #keep for later
 
 
-def initialize_document(pdf_name):
-    c = canvas.Canvas(pdf_name, pagesize=letter)
-    return c
-
 def create_header(course_no,
                   section,
                   course_title,
@@ -47,7 +43,40 @@ def create_header(course_no,
                   unit_no,
                   term
                   ):
-    """ This function creates the document and prints course information
+    """ Create the document and print course information at the top
+
+    This function creates a single PDF file, using information from
+    arguement values to determine the file name, and then displays
+    header information (again from arguement values) for the course
+
+    Parameters
+    ----------
+    course_no : str
+        The designated course number
+
+    section : str
+        The section code, taken from the sheet name containing the
+        student roster
+
+    course_title :str
+        The title of the course
+    
+    school : str
+        The institution where the course is being offered
+    
+    instructor : str
+        The name of the instructor 
+    
+    unit_no : str
+        The number of the unit/section for which these teams exist
+
+    term : str
+        The current semester.
+
+    Returns
+    -------
+    reportlab.genpdf.Canvas
+        A reportlab Canvas object, with the header information already placed.
     """
     # I don't like that this does the creation, but I don't know
     # how to create the file without repeating arguement
@@ -67,9 +96,22 @@ def create_header(course_no,
     return c
 
 def small_tables(groups):
-    """This function takes the student groups and returns a
-    list of reportlab tables, one for each group
+    """Create a reportlab tables for each individual group in a class.
     
+
+    This function takes a list of groups and puts them in a reportlab table.
+    The first row of the table is the team number (taken from its index in the
+    list plus one) and then one row for each student.
+
+    Parameters
+    ----------
+    groups : dict
+        A mapping of worksheet names to a collection of groups.
+
+    Returns
+    -------
+    list
+        A list of reportlab tables, one for each student group.
     """
     font_size = 14
     table_list = []
@@ -86,8 +128,24 @@ def small_tables(groups):
 
 
 def plot_tables(c, table_list):
-    """Take the list of tables and position them in the PDF document
+    """Take a list of tables and position them in the PDF document
     
+    This function takes a list of student tables (ideally created from 
+    small_tables) and positions them into a reportlab Canvas (which ideally
+    already has the header information printed)
+
+    Parameters
+    ----------
+    c : reportlab.genpdf.Canvas
+        A reportlab Canvas to display the table.
+
+    table_list : list
+        A list of reportlab Table objects, one for each group in the class
+
+    Returns
+    -------
+    reportlab.genpdf.Canvas
+        The Canvas object with the table of student groups placed
     """
     spaces = "      "
     data = []    
@@ -106,6 +164,16 @@ def plot_tables(c, table_list):
     full_table.wrapOn(c, 0, 0)
     table_w, table_h = full_table.wrap(0, 0)
     full_table.drawOn(c, (width-table_w)/2, height - 2*inch - table_h)
+    return c
+
+
+
+
+####################################
+# Functions used during development.
+
+def initialize_document(pdf_name):
+    c = canvas.Canvas(pdf_name, pagesize=letter)
     return c
 
 
@@ -130,14 +198,6 @@ def main():
 
         my_canvas.showPage()
         my_canvas.save()
-
-
-
-
-
-
-
-
 
 
 

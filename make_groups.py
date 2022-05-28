@@ -77,13 +77,6 @@ def get_students(df):
     students = df.loc[:,"Student Name"].tolist()   
     return students
 
-def get_df(filename):
-    """Get a Pandas dataframe from an Excel spreadsheet file
-    
-    """
-    # Only used for development purposes. Not needed in final version.
-    df = pd.read_excel(filename)
-    return df
 
 
 
@@ -139,6 +132,19 @@ def make_multiple_groups(rosters):
         groups = make_groups(rosters[key])
         all_groups[key] = groups
     return all_groups
+
+
+############
+# Functions used during development.
+
+def get_df(filename):
+    """Get a Pandas dataframe from an Excel spreadsheet file
+    
+    """
+    # Only used for development purposes. Not needed in final version.
+    df = pd.read_excel(filename)
+    return df
+
 
 
 def test_one_sheet():
