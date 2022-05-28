@@ -112,7 +112,7 @@ def plot_tables(c, table_list):
 
 
 def main():
-    dfs = get_dataframes("ARITHS 105 Rosters.xlsx")
+    dfs = get_rosters("ARITHS 105 Rosters.xlsx")
     all_groups = make_multiple_groups(dfs)
     for key in all_groups:
 

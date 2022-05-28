@@ -58,7 +58,4 @@ target/
 
 # Input/Output files
 .vscode/settings.json
-MATH 105-02 Unit 1 Teams.pdf
-MATH 105-01 Unit 1 Teams.pdf
-MATH 105-02 Unit 1 Teams.pdf
-ARITH 105-01 Unit 1 Teams.pdf
+*.pdf

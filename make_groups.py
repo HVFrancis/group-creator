@@ -17,12 +17,30 @@ files = ["Sample Roster 24.xlsx",
 ## dataframes, then generate a dictionary (str -> list of lists),
 ## with the section number being the key.
 
-def get_dataframes(filename):
-    """Get a list of all the data frames in the provided spreadsheet
+def get_rosters(filename):
+    """Get the lists of students from each sheet in the name Excel file.
 
-    It returns a dictionary of sheet name : data frame
+    This function opens an Excel spreadsheet, attempts to find students lists
+    from each sheet, and creates a dictionary mapping each sheet name to
+    the list of students (randomized) from that list.
+
+    Parameters
+    ----------
+    filename : str
+        The Excel spreadsheet
+
+    Returns
+    -------
+    dict
+        A mapping of sheetnames to the list of students.
+
+    Raises
+    ------
+    KeyError   
+        If a specifc sheet doesn't have a "Student Name" column
+        (propogated from get_students)
     """
-    dfs = dict()
+    rosters = dict()
     xls = pd.ExcelFile(filename)
     for sheet in xls.sheet_names:
         df =  pd.read_excel(filename,sheet_name=sheet)
@@ -30,19 +48,40 @@ def get_dataframes(filename):
             students = get_students(df)
         except KeyError:
             break  # go to the next sheet
-        dfs[sheet] = students
-    return dfs
+        rosters[sheet] = students
+    return rosters
 
 
 def get_students(df):
-    """Get a randomized list of students from the provided data frame
+    """Get a list of students from the provided data frame
     
+    This function takes a Pandas dataframe, and tries to find a 
+    list of students. It returns that list if found
+
+    Parameters
+    ----------
+    df : pd.Dataframe
+        A single worksheet dataframe
+
+    Returns
+    -------
+    list
+        A list of the students names from the data frame
+
+    Raises
+    ------
+    KeyError
+        Not Caught! If sheet doesn't have a "Student Name" column. 
+        (Propogated to get_rosters)
     """
     students = df.loc[:,"Student Name"].tolist()   
-    random.shuffle(students)
     return students
 
 def get_df(filename):
+    """Get a Pandas dataframe from an Excel spreadsheet file
+    
+    """
+    # Only used for development purposes. Not needed in final version.
     df = pd.read_excel(filename)
     return df
 
@@ -51,10 +90,22 @@ def get_df(filename):
 def make_groups(students):
     """Take a list of students and divide them into groups of three or four
 
+    This function takes a list of students, and divides them into groups of 
+    three or four. It has not be tested on lists with fewer than 6 students
+    (for which this program probably wouldn't be used).
 
+    Parameters
+    ----------
+    students : list
+        A list of student names.
 
+    Returns
+    -------
+    list
+        A list of lists, each individual list a list of 3 or 4 students
     """
     size = len(students)
+    random.shuffle(students)
     no_of_groups = (size + 3) // 4
     groups = []
     for i in range (no_of_groups):
@@ -66,14 +117,26 @@ def make_groups(students):
     return groups
 
 
-def make_multiple_groups(dfs):
-    """Given a dictionary of dataframes, produce a dictionary of student
-    groups
+def make_multiple_groups(rosters):
+    """Given a dictionary of rosters, produce a dictionary of student groups
 
+    This function takes a dictionary of rosters, divides each roster into
+    groups of 3 or 4, then returns a new dictionary, mapping the worksheet
+    name to its collection of groups.
+
+    Parameters
+    ----------
+    rosters : dict
+        A mapping of worksheet name to list of students in that sheet
+
+    Returns
+    -------
+    dict
+        A mapping of worksheet names to a collection of groups.
     """
     all_groups = dict()
-    for key in dfs:
-        groups = make_groups(dfs[key])
+    for key in rosters:
+        groups = make_groups(rosters[key])
         all_groups[key] = groups
     return all_groups
 
@@ -89,8 +152,8 @@ def test_one_sheet():
 
 
 def test_multiple_sheets():
-    dfs = get_dataframes("Sample Roster 24.xlsx")
-    all_groups = make_multiple_groups(dfs)
+    rosters = get_rosters("Sample Roster 24.xlsx")
+    all_groups = make_multiple_groups(rosters)
     print(all_groups)
 
 if __name__ == "__main__":
