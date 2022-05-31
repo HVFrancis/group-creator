@@ -12,10 +12,11 @@ def main():
     course_no = input("Course number: ")
     course_title = input("Course title: ")
     school = input("Institution Name: ")
+    instructor = input("Instructor Name: ")
     term = input("Semester: ")
     unit_no = input("Unit number: ")
 
-    rosters = make_groups.get_rosters("ARITHS 105 Rosters.xlsx")
+    rosters = make_groups.get_rosters(filename)
     all_groups = make_groups.make_multiple_groups(rosters)
     for key in all_groups:
 
@@ -23,7 +24,7 @@ def main():
                                   section = key,
                                   course_title = course_title,
                                   school = school,
-                                  instructor = school,
+                                  instructor = instructor,
                                   unit_no = unit_no,
                                   term = term  
                                   )
