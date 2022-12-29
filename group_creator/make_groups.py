@@ -43,12 +43,14 @@ def get_rosters(filename):
     rosters = dict()
     xls = pd.ExcelFile(filename)
     for sheet in xls.sheet_names:
+        print(f"reading sheet: {sheet}")
         df =  pd.read_excel(filename,sheet_name=sheet)
         try:
             students = get_students(df)
+            rosters[sheet] = students
         except KeyError:
-            break  # go to the next sheet
-        rosters[sheet] = students
+            pass  # go to the next sheet
+        
     return rosters
 
 
@@ -75,6 +77,7 @@ def get_students(df):
         (Propogated to get_rosters)
     """
     students = df.loc[:,"Student Name"].tolist()   
+    print (students)
     return students
 
 
