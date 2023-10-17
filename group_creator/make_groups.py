@@ -103,6 +103,7 @@ def make_groups(students):
     size = len(students)
     random.shuffle(students)
     no_of_groups = (size + 3) // 4
+    no_of_groups = min(6, no_of_groups)  # for classes limited to 6 or 7 tables
     groups = []
     for i in range (no_of_groups):
         groups.append([])
@@ -110,6 +111,8 @@ def make_groups(students):
         groups[i % no_of_groups].append(student)  
     for group in groups:
         group.sort()  
+    groups[0], groups[5] = groups[5], groups[0] # if a different table has 5 seats
+
     return groups
 
 
